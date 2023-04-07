@@ -3,16 +3,11 @@
 
 
 //  motor control pin layout   [ Left Front, Right Front , Back Left , Back Right]
-const byte motorPin1[] =  {17, 4, 18, 15};
-const byte motorPWM[] = {5,  16, 19, 2};
+// const byte motorPin1[] =  {17, 4, 18, 15};
+// const byte motorPWM[] = {5,  16, 19, 2};
 
-<<<<<<< HEAD
 const byte motorPin1[] =  {15,4, 17, 18};
-const byte motorPWM[] = {2,  16, 5, 19}
-=======
-//const byte motorPin1[] =  {15,4, 17, 18};
-//const byte motorPWM[] = {2,  16, 5, 19}
->>>>>>> 31f1e456ae303dc9e297ed724a49aaf5b744dfc7
+const byte motorPWM[] = {2,  16, 5, 19};
 
 //const byte motorPin2[] = {22, 2, 12, 17};
 const byte motorChannel[] = {6, 7, 8, 9};
