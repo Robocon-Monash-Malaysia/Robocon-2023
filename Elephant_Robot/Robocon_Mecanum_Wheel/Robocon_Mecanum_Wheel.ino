@@ -3,9 +3,16 @@
 // #include "User_interface.h"
 // #include "MPU6050.h"
 
+void setup();
+void loop();
+void system();
+
 // Functional Macros
 #include "PS3.h"
-#include "Movement.h"
+#include "Mecanum.h"
+#include "Servo.h"
+#include "DC_Motor.h"
+
 
 void setup() {
   // Setup Read Spead and Serial monitor's Baud Rate
@@ -19,18 +26,25 @@ void setup() {
 
   // Macro Setups
   PS3_setup();
-  Movement_setup();
+  Mecanum_setup();
+  Servo_setup();
+  dc_motor_setup();
 
-  motor(motor_Speed);
+
+  Mecanum(Mecanum_Speed);
   while (!Ps3.isConnected()) {
-    motor(motor_Speed);
-    PS3_move(stick_LX, stick_LY, stick_RX, stick_RY);
+    Mecanum(Mecanum_Speed);
+    PS3_move_Mecanum(stick_LX, stick_LY, stick_RX, stick_RY);
   }
-
 }
 
 void loop() {
-  PS3_move(stick_LX, stick_LY, stick_RX, stick_RY);
+  PS3_move_Mecanum(stick_LX, stick_LY, stick_RX, stick_RY);
+  Servo_run(Triangle, Square, L1, R1);
+  
+}
 
+void system()
+{
 
 }

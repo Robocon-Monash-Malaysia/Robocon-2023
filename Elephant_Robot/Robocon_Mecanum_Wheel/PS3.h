@@ -73,7 +73,8 @@ void PS3_setup() {
   Ps3.attach(notify);
   Ps3.attachOnConnect(onConnect);
   // Ps3.begin("03:02:03:04:05:06");
-  Ps3.begin("bb:bb:bb:bb:bb:bb");
+  // Ps3.begin("bb:bb:bb:bb:bb:bb");
+  Ps3.begin("cc:cc:cc:cc:cc:cc");
 }
 
 // Helper Function to Calculate Analog Stick Angle
@@ -103,7 +104,7 @@ float PS3_LeftAnalogStickSpeed(int LX, int LY) {
   if (abs(LY) > 15) LY_vector = map(LY, -127, 128, -10000, 10000) / 100;
   //  else LY_vector = 0;
   float Speed = sqrt(LX_vector * LX_vector + LY_vector * LY_vector);
-  if (Speed > 100) Speed = 100;
+  // if (Speed > 100) Speed = 100;
 
   return Speed;
 }
