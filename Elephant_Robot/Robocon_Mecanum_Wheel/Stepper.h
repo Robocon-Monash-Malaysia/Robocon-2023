@@ -3,24 +3,36 @@
 #include <AccelStepper.h>
 
 const int DIR = 5;
-const int STEP = 18;
+const int STEP = 19;
 
 #define motorInterfaceType 1
 AccelStepper motor(motorInterfaceType, STEP, DIR);
 
-void setup() {
-  Serial.begin(115200);
+void stepper_setup() {
+  // Serial.begin(115200);
   motor.setMaxSpeed(1000);
-  motor.setAcceleration(60);
+  motor.setAcceleration(1000);
+  // motor.setAcceleration(60);
   motor.setSpeed(200);
-  motor.moveTo(200);
+  motor.moveTo(0);
 }
 
-void loop() {
-  if (motor.distanceToGo() == 0) {
-    motor.moveTo(-motor.currentPosition());
-    Serial.println("Rotating Motor in opposite direction...");
+void stepper_loop(int L1, int R1) {
+
+
+  if(R1==1)
+  {
+    motor.moveTo(motor.currentPosition()+10);
   }
+  else if(L1 ==1)
+  {
+    motor.moveTo(motor.currentPosition()-10);
+    
+  }
+  // if (motor.distanceToGo() == 0) {
+  //   motor.moveTo(-motor.currentPosition());
+    // Serial.println("Rotating Motor in opposite direction...");
+  // }
   motor.run();
 }
 

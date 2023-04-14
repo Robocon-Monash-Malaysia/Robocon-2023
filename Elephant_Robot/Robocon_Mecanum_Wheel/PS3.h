@@ -46,6 +46,7 @@ void notify() {
   //  }
 
   // Servos
+  
   if (Ps3.event.button_down.r1) R1 = 1;
   if (Ps3.event.button_up.r1) R1 = 0;
   if (Ps3.event.button_down.l1) L1 = 1;

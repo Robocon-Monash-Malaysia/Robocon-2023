@@ -1,6 +1,6 @@
 //#include <Servo.h>
 
-#include "Esp32_Servo_Library.h"
+// #include "Esp32_Servo_Library.h"
 
 // Servo Pins
 static const int loadingServo = 18;  // Servo for loading rings
@@ -38,6 +38,7 @@ unsigned long curMillisLoad = 0;
 void Servo_setup() {
   PWMsetup(loadingServoChannel, loadingServo);  // Loading servo 
   setPos(loadingServoChannel, 0); // set initial loader position to 0
+  // Serial.println("running");
 }
 
 // Servos Service Routine
@@ -50,12 +51,12 @@ void run_Loader(int Triangle) {
   if (Triangle && LoadReady) {  // Josh added LoadReady condition
     LoadStartTime = millis();
     LoadReady = false;
-    // Load servos set to 90 deg
+    // Load servos set to 0 deg
     setPos(loadingServoChannel, 90);
 
     // Load.write(90);
     prevMillisLoad = curMillisLoad;
-    Serial.println("Loader Initiated.");
+    // Serial.println("Loader Initiated.");
   }
 
 
@@ -76,7 +77,7 @@ void run_Loader(int Triangle) {
     }
 
     if (progress > 2500) {
-      Serial.println("Load Reset.");
+      // Serial.println("Load Reset.");
       LoadMoving = false;
       LoadReady = true;
     }

@@ -3,23 +3,25 @@
 
 
 //  Mecanum control pin layout   [ Left Front, Right Front , Back Left , Back Right]
-const byte MecanumPin1[] =  {2, 16, 19, 5};
-const byte MecanumPWM[] = {15,  4, 18, 17};
+// const byte MecanumPin1[] =  {2, 16, 19, 5};
+// const byte MecanumPWM[] = {15,  4, 18, 17};
+const byte MecanumPin1[] =  {19, 5, 2, 16};
+const byte MecanumPWM[] = {18,  17, 15, 4};
 
 const byte MecanumChannel[] = {6, 7, 8, 9};
 
 int Mecanum_Speed[] = {0, 0, 0, 0};
-const byte PWM_resolution = 8;//16;
-const int PWM_resolution_max_value = 255;//65536;
+const byte Mecanum_PWM_resolution = 8;//16;
+const int Mecanum_PWM_resolution_max_value = 255;//65536;
 
 
 void Mecanum(int Speed[])
 {
   // invert back Mecanums of the system
-  Speed[0] = Speed[0];
+  Speed[0] = -Speed[0];
   Speed[1] = Speed[1];
   Speed[2] = -Speed[2];
-  Speed[3] = -Speed[3];
+  Speed[3] = Speed[3];
 
  // for loop to run each Mecanums individually
   for (int x = 0; x < sizeof(MecanumPin1); x++)
@@ -48,6 +50,7 @@ void PS3_move_Mecanum(int LX, int LY, int RX , int RY)
 {
   // angle from 0 to 2*pi
   float angle = PS3_LeftAnalogStickAngle (LX, LY)  ;
+   angle = angle - (90*PI)/180  ;
 
   //Speed  (range of 0 to 100)
   float Speed_total_percent = PS3_LeftAnalogStickSpeed(LX, LY);
@@ -56,7 +59,7 @@ void PS3_move_Mecanum(int LX, int LY, int RX , int RY)
   float turn_Speed = 0;
 
   // filter to ignore inputs below 15 from controller for rotation only
-  if (abs(RX) > 15) turn_Speed = map(RX, -128, 127 , -PWM_resolution_max_value, PWM_resolution_max_value);
+  if (abs(RX) > 15) turn_Speed = map(RX, -128, 127 , -Mecanum_PWM_resolution_max_value, Mecanum_PWM_resolution_max_value);
 
 
   /*Mecanum wheels programming instructions found on this website
@@ -64,10 +67,10 @@ void PS3_move_Mecanum(int LX, int LY, int RX , int RY)
     similar principle is applied, however the direction of motion was changed (clockwise being positive angle)
   */
 
-  Mecanum_Speed[0] = map(sin(angle + (1 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -PWM_resolution_max_value, PWM_resolution_max_value);
-  Mecanum_Speed[1] = map(sin(angle + (3 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -PWM_resolution_max_value, PWM_resolution_max_value);
-  Mecanum_Speed[2] = map(sin(angle + (3 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -PWM_resolution_max_value, PWM_resolution_max_value);
-  Mecanum_Speed[3] = map(sin(angle + (1 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -PWM_resolution_max_value, PWM_resolution_max_value);
+  Mecanum_Speed[0] = map(sin(angle + (1 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -Mecanum_PWM_resolution_max_value, Mecanum_PWM_resolution_max_value);
+  Mecanum_Speed[1] = map(sin(angle + (3 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -Mecanum_PWM_resolution_max_value, Mecanum_PWM_resolution_max_value);
+  Mecanum_Speed[2] = map(sin(angle + (3 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -Mecanum_PWM_resolution_max_value, Mecanum_PWM_resolution_max_value);
+  Mecanum_Speed[3] = map(sin(angle + (1 * PI) / 4) * Speed_total_percent * 100, -10000, 10000, -Mecanum_PWM_resolution_max_value, Mecanum_PWM_resolution_max_value);
 
   //apply turn Speed to allow control using right analog stick
   Mecanum_Speed[0] = Mecanum_Speed[0] + turn_Speed;
@@ -88,7 +91,7 @@ void Mecanum_setup()
   for (int x = 0; x < sizeof(MecanumPin1); x++)
   {
     pinMode(MecanumPin1[x], OUTPUT);
-    ledcSetup(MecanumChannel[x], 5000, PWM_resolution);
+    ledcSetup(MecanumChannel[x], 5000, Mecanum_PWM_resolution);
     ledcAttachPin(MecanumPWM[x] , MecanumChannel[x] );
   }
 }
