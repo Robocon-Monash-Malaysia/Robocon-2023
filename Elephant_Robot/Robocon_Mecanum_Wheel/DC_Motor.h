@@ -7,9 +7,10 @@ const byte motorPin1[] = { 12 };
 const byte motorPWM[] = { 14 };
 
 // flywheel control
-const byte flywheelPin = 32;
+const byte flywheelPin1 = 33;
+const byte flywheelPin2 = 32;
 
-const byte motorChannel[] = { 15, 0 };
+const byte motorChannel[] = { 12, 13 };
 
 
 
@@ -21,14 +22,18 @@ const int PWM_resolution_max_value = 255;  //65536;
 
 void dc_motor_setup() {
   // set motor pins as output
-  for (int x = 0; x < sizeof(motorPin1); x++) {
-    pinMode(motorPin1[x], OUTPUT);
-    ledcSetup(motorChannel[x], 5000, PWM_resolution);  // up to 16 channels
-    ledcAttachPin(motorPWM[x], motorChannel[x]);
-  }
+  // for (int x = 0; x < sizeof(motorPin1); x++) {
+  //   pinMode(motorPin1[x], OUTPUT);
+  //   ledcSetup(motorChannel[x], 5000, PWM_resolution);  // up to 16 channels
+  //   ledcAttachPin(motorPWM[x], motorChannel[x]);
+  // }
 
-  ledcSetup(motorChannel[1], 5000, PWM_resolution);  // up to 16 channels
-  ledcAttachPin(flywheelPin, motorChannel[1]);
+  ledcSetup( motorChannel[0], 5000, PWM_resolution);
+  ledcSetup( motorChannel[1], 5000, PWM_resolution);
+  ledcAttachPin(flywheelPin1, motorChannel[0]);
+  ledcAttachPin(flywheelPin2, motorChannel[1]);
+  //ledcSetup(motorChannel[1], 5000, PWM_resolution);  // up to 16 channels
+  //ledcAttachPin(flywheelPin, motorChannel[1]);
 }
 
 
@@ -40,15 +45,21 @@ void flywheel_motor(int runSpeed) {
   else if (runSpeed < -PWM_resolution_max_value) runSpeed = -PWM_resolution_max_value;
 
   if (runSpeed > 0) {  // Forward
-    digitalWrite(motorPin1[0], LOW);
-    ledcWrite(motorChannel[0], abs(runSpeed));
+    //digitalWrite(motorPin1[0], LOW);
+    ledcWrite(motorChannel[0], 0);
+    ledcWrite(motorChannel[1], runSpeed);
+    //ledcWrite(motorChannel[0], abs(runSpeed));
   } else if (runSpeed < 0) {  // Reverse
-    digitalWrite(motorPin1[0], HIGH);
+  //digitalWrite(motorPin1[0], HIGH);
+    ledcWrite(motorChannel[1], 0);
+    ledcWrite(motorChannel[0], runSpeed);
     // ledcWrite(motorChannel[x], abs(runSpeed));
-    ledcWrite(motorChannel[0], 0);
+    //ledcWrite(motorChannel[0], 0);
   } else {  //Stop
-    digitalWrite(motorPin1[0], HIGH);
+    //digitalWrite(motorPin1[0], HIGH);
     ledcWrite(motorChannel[0], 0);
+    ledcWrite(motorChannel[1], 0);
+    //ledcWrite(motorChannel[0], 0);
   }
 }
 
